@@ -14,6 +14,7 @@ macro(CMakeGitCurrentCommitHash __hash)
         message(FATAL_ERROR "fail to fetch commit hash of current HEAD")
     endif()
     
+    list(JOIN ${__hash} "" ${__hash})
     foreach(__v ${${m}_unsetter})
         unset(${__v})
     endforeach()
