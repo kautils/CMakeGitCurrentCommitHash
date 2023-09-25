@@ -2,7 +2,7 @@ macro(CMakeGitCurrentCommitHash __hash)
     set(${PROJECT_NAME}_m_evacu ${m})
     set(m ${PROJECT_NAME}.CMakeGitCurrentCommitHash)
     
-    list(APPEND ${m}_unsetter ${m}_res ${m}_err)
+    list(APPEND ${m}_unsetter ${m}_res ${m}_err ${m}_out)
     execute_process(
         COMMAND git rev-parse HEAD
         RESULT_VARIABLE ${m}_res
@@ -14,7 +14,9 @@ macro(CMakeGitCurrentCommitHash __hash)
         message(FATAL_ERROR "fail to fetch commit hash of current HEAD")
     endif()
     
-    string(JOIN "" ${__hash} "${${__hash}}")
+    # because the size of return value is 41, and this caused error when passing c/c++ via compile definition. 
+    string(SUBSTRING "${${__hash}}" 0 40 ${__hash})
+    
     foreach(__v ${${m}_unsetter})
         unset(${__v})
     endforeach()
